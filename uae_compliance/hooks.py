@@ -1,7 +1,7 @@
 app_name = "uae_compliance"
 app_title = "Uae Compliance"
 app_publisher = "Blaze Technology Solutions"
-app_description = "ERPNext app to simplify compliance with "
+app_description = "ERPNext app to simplify compliance with UAE Rules and Regulations"
 app_email = "niyas@blazeqatar.com"
 app_license = "mit"
 
@@ -137,13 +137,33 @@ app_license = "mit"
 # ---------------
 # Hook on document methods and events
 
-# doc_events = {
-# 	"*": {
-# 		"on_update": "method",
-# 		"on_cancel": "method",
-# 		"on_trash": "method"
-# 	}
-# }
+doc_events = {
+	"Sales Invoice": {
+        "validate": "uae_compliance.overrides.sales_invoice.set_and_validate_advances_with_vat",
+        "before_cancel": "uae_compliance.overrides.sales_invoice.before_cancel"
+    },
+    "Payment Entry": {
+        "on_submit": "uae_compliance.overrides.payment_entry.on_submit",
+        "on_update_after_submit": "uae_compliance.overrides.payment_entry.on_update_after_submit",
+    },
+    "Unreconcile Payment": {
+        "before_submit": "uae_compliance.overrides.unreconcile_payment.before_submit",
+    },
+}
+
+regional_overrides = {
+	"United Arab Emirates": {
+        "erpnext.controllers.accounts_controller.get_advance_payment_entries_for_regional": (
+            "uae_compliance.overrides.payment_entry.get_advance_payment_entries_for_regional"
+        ),
+        "erpnext.accounts.doctype.payment_reconciliation.payment_reconciliation.adjust_allocations_for_taxes": (
+            "uae_compliance.overrides.payment_entry.adjust_allocations_for_taxes_in_payment_reconciliation"
+        ),
+        "erpnext.accounts.doctype.payment_entry.payment_entry.add_regional_gl_entries": (
+            "uae_compliance.overrides.payment_entry.update_gl_for_advance_vat_reversal"
+        ),
+	}
+}
 
 # Scheduled Tasks
 # ---------------
