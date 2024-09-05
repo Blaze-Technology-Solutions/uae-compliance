@@ -138,9 +138,9 @@ app_license = "mit"
 # Hook on document methods and events
 
 doc_events = {
-	"Sales Invoice": {
+    "Sales Invoice": {
         "validate": "uae_compliance.overrides.sales_invoice.set_and_validate_advances_with_vat",
-        "before_cancel": "uae_compliance.overrides.sales_invoice.before_cancel"
+        "before_cancel": "uae_compliance.overrides.sales_invoice.before_cancel",
     },
     "Payment Entry": {
         "on_submit": "uae_compliance.overrides.payment_entry.on_submit",
@@ -152,7 +152,7 @@ doc_events = {
 }
 
 regional_overrides = {
-	"United Arab Emirates": {
+    "United Arab Emirates": {
         "erpnext.controllers.accounts_controller.get_advance_payment_entries_for_regional": (
             "uae_compliance.overrides.payment_entry.get_advance_payment_entries_for_regional"
         ),
@@ -162,7 +162,7 @@ regional_overrides = {
         "erpnext.accounts.doctype.payment_entry.payment_entry.add_regional_gl_entries": (
             "uae_compliance.overrides.payment_entry.update_gl_for_advance_vat_reversal"
         ),
-	}
+    }
 }
 
 # Scheduled Tasks
@@ -261,4 +261,3 @@ regional_overrides = {
 # default_log_clearing_doctypes = {
 # 	"Logging DocType Name": 30  # days to retain logs
 # }
-

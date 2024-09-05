@@ -15,8 +15,10 @@ from uae_compliance.utils import get_all_vat_accounts
 def on_submit(doc, method=None):
     make_vat_revesal_entry_from_advance_payment(doc)
 
+
 def on_update_after_submit(doc, method=None):
     make_vat_revesal_entry_from_advance_payment(doc)
+
 
 def make_vat_revesal_entry_from_advance_payment(doc):
     """
@@ -34,6 +36,7 @@ def make_vat_revesal_entry_from_advance_payment(doc):
     # Creates GLEs and PLEs
     make_gl_entries(gl_dict)
 
+
 def update_gl_for_advance_vat_reversal(gl_dict, doc):
     if not doc.taxes:
         return
@@ -43,6 +46,7 @@ def update_gl_for_advance_vat_reversal(gl_dict, doc):
             continue
 
         gl_dict.extend(_get_gl_for_advance_vat_reversal(doc, row))
+
 
 def _get_gl_for_advance_vat_reversal(payment_entry, reference_row):
     gl_dicts = []
@@ -160,6 +164,7 @@ def get_proportionate_taxes_for_reversal(payment_entry, reference_row):
 
     return get_proportionate_taxes_for_row(payment_entry, reference_row, taxes)
 
+
 def balance_taxes(payment_entry, reference_row, taxes):
     for account, amount in taxes.items():
         for allocation_row in payment_entry.references:
@@ -177,6 +182,7 @@ def balance_taxes(payment_entry, reference_row, taxes):
 
     return taxes
 
+
 def get_proportionate_taxes_for_row(payment_entry, reference_row, taxes):
     base_allocated_amount = payment_entry.calculate_base_allocated_amount_for_reference(
         reference_row
@@ -187,6 +193,7 @@ def get_proportionate_taxes_for_row(payment_entry, reference_row, taxes):
         )
 
     return taxes
+
 
 def get_advance_payment_entries_for_regional(
     party_type,
@@ -231,6 +238,7 @@ def get_advance_payment_entries_for_regional(
 
     return payment_entries
 
+
 def get_taxes_summary(company, payment_entries):
     vat_accounts = get_all_vat_accounts(company)
     references = [
@@ -267,6 +275,7 @@ def get_taxes_summary(company, payment_entries):
     taxes = {tax.payment_entry: tax for tax in taxes}
 
     return taxes
+
 
 def adjust_allocations_for_taxes_in_payment_reconciliation(doc):
     if not doc.allocation:
